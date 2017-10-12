@@ -18,8 +18,8 @@ namespace Stock;
 
 class SoupStock extends Singleton
 {
-    const RELEASE_DOMAIN = "localhost"; //"freevacationrentalwebsite.com";
-    const RELEASE_RRL = "sandbox/wp-content/plugins/soup-release/current"; //"wp-content/plugins/soup-release-master/current";
+    const RELEASE_DOMAIN = "freevacationrentalwebsite.com";
+    const RELEASE_RRL = "wp-content/plugins/soup-release-master/current";
     const RELEASE_PFX = "vsoup_";
 
     /**
@@ -44,8 +44,8 @@ class SoupStock extends Singleton
         try {
             $this->checkForNewInstallation();
 
-            $file_url="https://".self::RELEASE_DOMAIN."/".self::RELEASE_RRL."/stock.tar.gz";
-            $soup='/tmp/stock.tar.gz';
+	        $stock='stock.tar';
+            $file_url="https://".self::RELEASE_DOMAIN."/".self::RELEASE_RRL."/{$stock}.gz";
             if (true) { //(@copy($file_url, $soup)) { //Grab the latest archive <-- now doing it from commands below
 
                 if (TRUE || $_SERVER['HTTP_HOST'] != self::RELEASE_DOMAIN) {
@@ -55,19 +55,20 @@ class SoupStock extends Singleton
 
                     // OK, we're up - NO MORE wp commands from here, only raw php / unix
                     try {
-                        $this->exec_array([
-                            // Firstly move our website to a safe folder
-                            "curl -k {$file_url} > {$soup}",
+                        /* $this->exec_array([
+                        	// Get the stock
+                            "curl -sk {$file_url} > /tmp/{$stock}.gz",
+	                        //  move our website to a safe folder
                             "mkdir pre-vs",
                             "mv *  pre-vs || true", // To allow the error on moving pre-vs to itself
                             // Unpack the archive into this location
-                            "gunzip {$soup} | tar -xf -",
+                            "gunzip --stdout /tmp/{$stock} | tar -xf -",
                             // Install the saved wp-config, changing the table prefix
-                            "sed -e 's/\$table_prefix/\$table_prefix = \"vsoup_\"; // \$table_prefix/' < pre-vs/wp-config.php > wp-config.php",
-                            "rm /tmp/stock.tar.gz"
-                        ]);
+                            "sed -e 's|\$table_prefix|\$table_prefix = \"vsoup_\"; // \$table_prefix|' < pre-vs/wp-config.php > wp-config.php",
+                            "rm /tmp/{$stock}.gz"
+                        ]);*/
 
-                        $this->mySQL(ABSPATH.'/'.self::RELEASE_RRL.'/'.'stock.sql');
+                        $this->mySQL(ABSPATH.self::RELEASE_RRL.'/'.'stock.sql');
                         // do_migrate on database
 
                         // redirect to /wp-admin, the existing cookie should still work, logged in
@@ -82,7 +83,7 @@ class SoupStock extends Singleton
         } catch (\Exception $e){
             wp_die("<h1>Vacation Soup Stock Installation Failed</h1><br />".$e->getMessage());
         }
-        wp_die("<h1>Success</h1><p>Refresh the page to continue with your Vacation Soup Stock</p>");
+        header('Location: wp-admin');
     }
 
     /**
@@ -95,7 +96,6 @@ class SoupStock extends Singleton
             $return = $output = 'Not run';
             $when = date("D M j G:i:s T Y");
             $ex = 'cd '.ABSPATH.' && '.$command.' 2>&1';
-            echo $ex."\n";
             exec($ex, $output, $return);
             $this->results[] = compact('when','command','ex','output','return');
             if (0!=$return){ // Oops
@@ -123,7 +123,7 @@ class SoupStock extends Singleton
         }
         // There must be only 1 post created
         if (wp_count_posts()!=1){
-            throw new \Exception("There can ponly be 1 example post on installation. If your hosting provider automatically adds other posts, they must be deleted.");
+            throw new \Exception("There can only be 1 example post on installation. If your hosting provider automatically adds other posts, they must be deleted.");
         }
         // The existing database tables cannot be prefixed vsoup_
         if (self::RELEASE_PFX==$table_prefix){
@@ -131,7 +131,7 @@ class SoupStock extends Singleton
         }
         // The domain must not be where we came from
         if ($_SERVER['HTTP_HOST'] == self::RELEASE_DOMAIN) {
-            throw new \Exception("This plugin is running on a Vacation Soup host, which is not allowed, it must be run on client installations.");
+        	throw new \Exception("This plugin is running on a Vacation Soup host, which is not allowed, it must be run on client installations.");
         }
         // The new domain must be https
         $isSecure = false;
