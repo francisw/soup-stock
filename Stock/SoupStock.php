@@ -32,6 +32,7 @@ class SoupStock extends Singleton
     }
 
     public function init(){
+    	global $table_prefix,$wpdb;
         // We can't have to follow normal Wordpress conventions here because we are
         // replacing the Wordpress installation with the Soup, so we run it all from within init
 
@@ -46,10 +47,13 @@ class SoupStock extends Singleton
 
 	        $stock='stock.tar';
             $file_url="https://".self::RELEASE_DOMAIN."/".self::RELEASE_RRL."/{$stock}.gz";
+            $old_table_prefix = $table_prefix;
+            $new_table_prefix = 'vsoup_';
             $sql_foreign = ABSPATH.self::RELEASE_RRL.'/'.'stock.sql';
             $sql_local = "/tmp/stock.sql";
             if (true) { //(@copy($file_url, $soup)) { //Grab the latest archive <-- now doing it from commands below
 
+	            set_time_limit(30);
                 if (TRUE || $_SERVER['HTTP_HOST'] != self::RELEASE_DOMAIN) {
                     // Save the wp-config, we will only change the $table_prefix
                     // Save the logged in User record, incl Password etc
@@ -68,14 +72,13 @@ class SoupStock extends Singleton
                             // Install the saved wp-config, changing the table prefix
                             "sed -e 's|\$table_prefix|\$table_prefix = \"vsoup_\"; // \$table_prefix|' < pre-vs/wp-config.php > wp-config.php",
 		                    // And change any VacationSoup urls to local ones in the SQL
-							"sed -e 's|".self::RELEASE_DOMAIN."|".$_SERVER['HTTP_HOST']."|' < {$sql_foreign} > {$sql_local}",
+							"sed -e 's|".self::RELEASE_DOMAIN."|".$_SERVER['HTTP_HOST']."|g' < {$sql_foreign} > {$sql_local}",
                             "rm /tmp/{$stock}.gz"
                         ]);
 
                         $this->mySQL($sql_local);
-                        // do_migrate on database
-
-                        // redirect to /wp-admin, the existing cookie should still work, logged in
+	                    $wpdb->query("DELETE FROM {$new_table_prefix} WHERE ID=1");
+	                    $wpdb->query("INSERT INTO {$new_table_prefix} SELECT * FROM {$old_table_prefix} WHERE ID=1");
 
                     } catch (\Exception $e){
                         throw new \Exception("Fatal Error during installation, this Wordpress is now likely to be corrupted, a new Installation is necessary. ".$e->getMessage() );
