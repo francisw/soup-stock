@@ -55,7 +55,7 @@ class SoupStock extends Singleton
 
                     // OK, we're up - NO MORE wp commands from here, only raw php / unix
                     try {
-                        /* $this->exec_array([
+                    	$this->exec_array([
                         	// Get the stock
                             "curl -sk {$file_url} > /tmp/{$stock}.gz",
 	                        //  move our website to a safe folder
@@ -66,7 +66,7 @@ class SoupStock extends Singleton
                             // Install the saved wp-config, changing the table prefix
                             "sed -e 's|\$table_prefix|\$table_prefix = \"vsoup_\"; // \$table_prefix|' < pre-vs/wp-config.php > wp-config.php",
                             "rm /tmp/{$stock}.gz"
-                        ]);*/
+                        ]);
 
                         $this->mySQL(ABSPATH.self::RELEASE_RRL.'/'.'stock.sql');
                         // do_migrate on database
