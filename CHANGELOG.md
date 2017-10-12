@@ -4,3 +4,4 @@
 
 * **Enhancements**:
  - Created plugin
+ - Running tests locally
