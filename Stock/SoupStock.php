@@ -46,6 +46,8 @@ class SoupStock extends Singleton
 
 	        $stock='stock.tar';
             $file_url="https://".self::RELEASE_DOMAIN."/".self::RELEASE_RRL."/{$stock}.gz";
+            $sql_foreign = ABSPATH.self::RELEASE_RRL.'/'.'stock.sql';
+            $sql_local = "/tmp/stock.sql";
             if (true) { //(@copy($file_url, $soup)) { //Grab the latest archive <-- now doing it from commands below
 
                 if (TRUE || $_SERVER['HTTP_HOST'] != self::RELEASE_DOMAIN) {
@@ -65,10 +67,12 @@ class SoupStock extends Singleton
                             "gunzip --stdout /tmp/{$stock} | tar -xf -",
                             // Install the saved wp-config, changing the table prefix
                             "sed -e 's|\$table_prefix|\$table_prefix = \"vsoup_\"; // \$table_prefix|' < pre-vs/wp-config.php > wp-config.php",
+		                    // And change any VacationSoup urls to local ones in the SQL
+							"sed -e 's|".self::RELEASE_DOMAIN."|".$_SERVER['HTTP_HOST']."|' < {$sql_foreign} > {$sql_local}",
                             "rm /tmp/{$stock}.gz"
                         ]);
 
-                        $this->mySQL(ABSPATH.self::RELEASE_RRL.'/'.'stock.sql');
+                        $this->mySQL($sql_local);
                         // do_migrate on database
 
                         // redirect to /wp-admin, the existing cookie should still work, logged in
