@@ -59,7 +59,7 @@ class SoupStock extends Singleton
                             // Firstly move our website to a safe folder
                             "curl -k {$file_url} > {$soup}",
                             "mkdir pre-vs",
-                            "mv *  pre-vs",
+                            "mv *  pre-vs || true", // To allow the error on moving pre-vs to itself
                             // Unpack the archive into this location
                             "gunzip {$soup} | tar -xf -",
                             // Install the saved wp-config, changing the table prefix
