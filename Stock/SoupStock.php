@@ -36,7 +36,7 @@ class SoupStock extends Singleton
         // replacing the Wordpress installation with the Soup, so we run it all from within init
 
         // Firstly prevent multiple calls. Have observed WP calling activation 3 times
-        if (get_option('vs-stock-installing')){
+        if (true===get_option('vs-stock-installing')){
             throw new \Exception("Already installing Vacation Soup stock");
         }
         update_option('vs-stock-installing',true);
@@ -96,7 +96,7 @@ class SoupStock extends Singleton
             $when = date("D M j G:i:s T Y");
             $ex = 'cd '.ABSPATH.' && '.$command.' 2>&1';
             echo $ex."\n";
-            //exec($ex, $output, $return);
+            exec($ex, $output, $return);
             $this->results[] = compact('when','command','ex','output','return');
             if (0!=$return){ // Oops
                 throw new \Exception("Error running shell command: ".$command);
@@ -114,12 +114,12 @@ class SoupStock extends Singleton
             throw new \Exception("Vacation Soup Stock Installer was already run. Installed version from ".$when);
         }
         // There must only be 1 plugin installed (this one)
-        if (count(get_option('active_plugins'))!=1){
+        if (count(get_option('active_plugins'))!=0){
             throw new \Exception("The only active plugin must be Vacation Soup Stock. If your hosting provider automatically installs a plugin on a new installation, it must be deactivated.");
         }
         // There must be only 1 user created
-        if (count_users()!=1){
-            throw new \Exception("The only user must be the one you created on installation. If your hosting provider automatically adds a user, it must be deleted.");
+        if (count_users()['total_users'] != 1){
+            throw new \Exception("The only user must be the one you created on installation. If your hosting provider automatically adds a user, it must be deleted. There are ".print_r(count_users(),true)." users.");
         }
         // There must be only 1 post created
         if (wp_count_posts()!=1){
