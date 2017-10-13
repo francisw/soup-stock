@@ -34,4 +34,5 @@ if ( ! function_exists( 'version_compare' ) || version_compare( PHP_VERSION, '5.
 // Now check he required plugins
 
 require_once("inc/autoloader.php");
-register_activation_hook(__FILE__,array(SoupStock::single(),'init'));
+
+add_action("admin_init",array(SoupStock::single(),'init'));

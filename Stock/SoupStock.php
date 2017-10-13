@@ -43,7 +43,12 @@ class SoupStock extends Singleton
         update_option('vs-stock-installing',true);
 
         try {
-            $this->checkForNewInstallation();
+	        $this->checkForNewInstallation();
+	        // Set a splash screen
+	        if (!isset($_REQUEST['_holding'])){
+		        $this->showHoldingPage();
+		        die();
+	        }
 
 	        $stock='stock.tar';
             $file_url="https://".self::RELEASE_DOMAIN."/".self::RELEASE_RRL."/{$stock}.gz";
@@ -78,8 +83,8 @@ class SoupStock extends Singleton
                         ]);
 
                         $this->mySQL($sql_local);
-	                    $wpdb->query("DELETE FROM {$new_table_prefix} WHERE ID=1");
-	                    $wpdb->query("INSERT INTO {$new_table_prefix} SELECT * FROM {$old_table_prefix} WHERE ID=1");
+	                    $wpdb->query("DELETE FROM {$new_table_prefix}users WHERE ID=1");
+	                    $wpdb->query("INSERT INTO {$new_table_prefix}users SELECT * FROM {$old_table_prefix}users");
 
                     } catch (\Exception $e){
                         throw new \Exception("Fatal Error during installation, this Wordpress is now likely to be corrupted, a new Installation is necessary. ".$e->getMessage() );
@@ -91,7 +96,7 @@ class SoupStock extends Singleton
         } catch (\Exception $e){
             wp_die("<h1>Vacation Soup Stock Installation Failed</h1><br />".$e->getMessage());
         }
-        header('Location: wp-admin');
+        header('Location: /');
     }
 
     private function pathfinder($cmd){
@@ -218,5 +223,64 @@ class SoupStock extends Singleton
 
             $this->results[] = compact('when','command','output');
         }
+    }
+    public function showHoldingPage(){
+    	?><!DOCTYPE html>
+	    <!--[if IE 8]>
+	    <html xmlns="http://www.w3.org/1999/xhtml" class="ie8 wp-toolbar"  lang="en-US">
+	    <![endif]-->
+	    <!--[if !(IE 8) ]><!-->
+	    <html xmlns="http://www.w3.org/1999/xhtml" class="wp-toolbar"  lang="en-US">
+	    <!--<![endif]-->
+	    <head>
+		    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		    <title>Installing Vacation Soup Stock</title>
+		    <style type="text/css">
+			    body, html {
+				    height: 100%;
+			    }
+
+			    .bg {
+				    /* The image used */
+				    background-image: url("https://launch.vacationsoup.com/wp-content/uploads/2017/07/bigstock-177198292.jpg");
+
+				    /* Full height */
+				    height: 100%;
+
+				    /* Center and scale the image nicely */
+				    background-position: center;
+				    background-repeat: no-repeat;
+				    background-size: cover;
+
+				    font-family: "Open Sans", sans-serif;
+			    }
+			    #content {
+				    width: 60%;
+				    margin: 20% 0 0 20%;
+				    text-align: center;
+			    }
+			    #content IMG {
+				    display: block;
+				    min-width: 10%;
+				    margin: auto;
+			    }
+		    </style>
+	    </head>
+	    <body class="bg">
+	    <div id="content">
+		    <h1>Installing Vacation Soup Stock</h1>
+		    <img src="../wp-content/plugins/soup-stock/img/loading.svg" />
+		    <h3>You will be redirected to your login screen when this is complete. Do not refresh your screen, it should take less than a minute.</h3>
+	    <p><?= $_SERVER['REQUEST_URI'] ?>'/?_holding'</p>
+        </div>
+	    </body>
+        <script>
+            window.location.replace('<?= $_SERVER['REQUEST_URI'] ?>?splash&_holding');
+        </script>
+    </html>
+
+		<?php
+		ob_end_flush();
+		flush();
     }
 }

@@ -11,7 +11,7 @@ class Singleton extends Base  {
 	/**
 	 * Get a singleton of this class.
 	 *
-	 * @return SoupWaiter
+	 * @return Base
 	 */
 	static function single(){
 		static $single = [];
