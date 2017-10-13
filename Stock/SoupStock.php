@@ -102,7 +102,7 @@ class SoupStock extends Singleton
     }
     #content {
        width: 60%;
-       margin: 20% 0 0 20%;
+       margin: 0 auto;
        background: rgba(255,255,255,0.8);
        padding: 20px;
     }
@@ -291,7 +291,7 @@ class SoupStock extends Singleton
 	    <body class="bg">
 	    <div id="content">
 		    <h1>Installing Vacation Soup Stock</h1>
-		    <img src="../wp-content/plugins/soup-stock/img/loading.svg" />
+		    <img src="../../wp-content/plugins/soup-stock/img/loading.svg" />
 		    <h3>You will be redirected to your login screen when this is complete. Do not refresh your screen, it should take less than a minute.</h3>
 	    <p><?= $_SERVER['REQUEST_URI'] ?>'/?_holding'</p>
         </div>
