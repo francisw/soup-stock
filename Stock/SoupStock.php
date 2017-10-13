@@ -87,11 +87,28 @@ class SoupStock extends Singleton
 	                    $wpdb->query("INSERT INTO {$new_table_prefix}users SELECT * FROM {$old_table_prefix}users");
 
                     } catch (\Exception $e){
-                        throw new \Exception("Fatal Error during installation, this Wordpress is now likely to be corrupted, a new Installation is necessary. ".$e->getMessage() );
+                        $splash = '<style> body, html { height: 100%; }
+    body { 
+       background-image: url("https://launch.vacationsoup.com/wp-content/uploads/2017/07/bigstock-177198292.jpg" );
+       background-position: center;
+       background-repeat: no-repeat;
+       background-size: cover;
+       max-width: 100%;
+       font-family: "Open Sans", sans-serif;
+    }
+    #content {
+       width: 60%;
+       margin: 20% 0 0 20%;
+       background: rgba(255,255,255,0.8);
+    }
+}
+			                        </style>';
+
+                        throw new \Exception("{$splash}<div id='content'></div>
+                    <h1>Fatal Error during installation</h1>
+                    <p>This Wordpress is now likely to be corrupted, a new Installation is necessary.</p><br />".$e->getMessage().'</div>' );
                     }
                 }
-            } else {
-                throw new \Exception("Failed to import ".$file_url);
             }
         } catch (\Exception $e){
             wp_die("<h1>Vacation Soup Stock Installation Failed</h1><br />".$e->getMessage());
