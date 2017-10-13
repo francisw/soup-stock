@@ -203,19 +203,19 @@ class SoupStock extends Singleton
         ($fp = fopen($filename, 'r')) OR die('failed to open file:'.$filename);
 
         // check for previous error
-        if( file_exists($errorFilename) ){
-            wp_die('<pre> previous error: '.file_get_contents($errorFilename));
-        }
+        //if( file_exists($errorFilename) ){
+        //    wp_die('<pre> previous error: '.file_get_contents($errorFilename));
+        //}
 
         // activate automatic reload in browser
         // echo '<html><head> <meta http-equiv="refresh" content="'.($maxRuntime+2).'"><pre>';
 
         // go to previous file position
         $filePosition = 0;
-        if( file_exists($progressFilename) ){
-            $filePosition = file_get_contents($progressFilename);
-            fseek($fp, $filePosition);
-        }
+        //if( file_exists($progressFilename) ){
+        //    $filePosition = file_get_contents($progressFilename);
+        //    fseek($fp, $filePosition);
+        //}
 
         $queryCount = 0;
         $query = '';
