@@ -83,7 +83,7 @@ class SoupStock extends Singleton
                             "sed -e 's|\$table_prefix|\$table_prefix = \"vsoup_\"; // \$table_prefix|' < pre-vs/wp-config.php > wp-config.php",
 		                    // And change any VacationSoup urls to local ones in the SQL
 							"sed -e 's|".self::RELEASE_DOMAIN."|".$_SERVER['HTTP_HOST']."|g' < {$sql_foreign} > {$sql_local}",
-                            "rm /tmp/{$stock}.gz"
+                            "rm -rf {$stock} pre-vs"
                         ]);
 
                         $this->mySQL($sql_local);
