@@ -43,10 +43,14 @@ class SoupStock extends Singleton
         update_option('vs-stock-installing',true);
 
         try {
+	        if (isset($_REQUEST['nosoup'])){
+		        return;
+	        }
+
 	        $this->checkForNewInstallation();
 	        // Set a splash screen
 	        if (!isset($_REQUEST['_holding'])){
-		        $this->showHoldingPage();
+		        $this->showHoldingPage(); // Holding page creates request again
 		        die();
 	        }
 
