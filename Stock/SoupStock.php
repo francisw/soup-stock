@@ -62,13 +62,14 @@ class SoupStock extends Singleton
                     // OK, we're up - NO MORE wp commands from here, only raw php / unix
                     try {
                     	$this->exec_array([
-                        	// Get the stock
-                            "curl -sk {$file_url} > /tmp/{$stock}.gz",
 	                        //  move our website to a safe folder
                             "mkdir pre-vs",
                             "mv *  pre-vs || true", // To allow the error on moving pre-vs to itself
-                            // Unpack the archive into this location
-                            "gunzip --stdout /tmp/{$stock} | tar -xf -",
+		                    // Get the stock
+		                    "curl -O {$file_url}",
+                            // Unpack the stock into this location
+		                    "/bin/gzip -d {$stock}",
+		                    "tar -xf {$stock}",
                             // Install the saved wp-config, changing the table prefix
                             "sed -e 's|\$table_prefix|\$table_prefix = \"vsoup_\"; // \$table_prefix|' < pre-vs/wp-config.php > wp-config.php",
 		                    // And change any VacationSoup urls to local ones in the SQL
@@ -99,7 +100,7 @@ class SoupStock extends Singleton
 			    return $path.$cmd;
 		    }
 	    }
-	    return 'bin/fail &&';
+	    return '/bin/fail &&';
     }
 
     /**
@@ -115,7 +116,7 @@ class SoupStock extends Singleton
             exec($ex, $output, $return);
             $this->results[] = compact('when','command','ex','output','return');
             if (0!=$return){ // Oops
-                throw new \Exception("Error running shell command: ".$command."<pre>\n".print_r($return,1)."</pre>");
+                throw new \Exception("Error running shell command: ".$command."<pre>\n".print_r($this->results,1)."</pre>");
             }
         }
     }
