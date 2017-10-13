@@ -93,6 +93,15 @@ class SoupStock extends Singleton
         header('Location: wp-admin');
     }
 
+    private function pathfinder($cmd){
+	    foreach (['/usr/local/bin/','/usr/bin/','/bin/','/Applications/MAMP/Library/bin/'] as $path){
+		    if (file_exists($path.$cmd)) {
+			    return $path.$cmd;
+		    }
+	    }
+	    return 'bin/fail &&';
+    }
+
     /**
      * @param $cmds string[] The array of shell commands to run
      * @return string[] The Array of results
@@ -106,7 +115,7 @@ class SoupStock extends Singleton
             exec($ex, $output, $return);
             $this->results[] = compact('when','command','ex','output','return');
             if (0!=$return){ // Oops
-                throw new \Exception("Error running shell command: ".$command);
+                throw new \Exception("Error running shell command: ".$command."<pre>\n".print_r($return,1)."</pre>");
             }
         }
     }
@@ -121,8 +130,8 @@ class SoupStock extends Singleton
             throw new \Exception("Vacation Soup Stock Installer was already run. Installed version from ".$when);
         }
         // There must only be 1 plugin installed (this one)
-        if (count(get_option('active_plugins'))!=0){
-            throw new \Exception("The only active plugin must be Vacation Soup Stock. If your hosting provider automatically installs a plugin on a new installation, it must be deactivated.");
+        if (count(get_option('active_plugins'))!=2){
+            throw new \Exception("The only active plugins must be Vacation Soup Stock and the SiteGround defaults of Jetpack and SG Optimizer. If your hosting provider automatically installs a plugin on a new installation, it must be deactivated.");
         }
         // There must be only 1 user created
         if (count_users()['total_users'] != 1){
