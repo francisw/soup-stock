@@ -158,7 +158,7 @@ class SoupStock extends Singleton
             throw new \Exception("Vacation Soup Stock Installer was already run. Installed version from ".$when);
         }
         // There must only be 1 plugin installed (this one)
-        if (count(get_option('active_plugins'))!=3){
+        if (count(get_option('active_plugins'))>3){
             throw new \Exception("The only active plugins must be Vacation Soup Stock and the SiteGround defaults of Jetpack and SG Optimizer. If your hosting provider automatically installs a plugin on a new installation, it must be deactivated.");
         }
         // There must be only 1 user created
@@ -219,7 +219,7 @@ class SoupStock extends Singleton
 
         $queryCount = 0;
         $query = '';
-        while( ($line=fgets($fp, 1024000)) ){ // removed: $deadline>time() AND
+        while( ($line=fgets($fp, 8192000)) ){ // removed: $deadline>time() AND
             set_time_limit(30);
             if(substr($line,0,2)=='--' OR trim($line)=='' ){
                 continue;
