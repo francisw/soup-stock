@@ -104,13 +104,14 @@ class SoupStock extends Singleton
        width: 60%;
        margin: 20% 0 0 20%;
        background: rgba(255,255,255,0.8);
+       padding: 20px;
     }
 }
 			                        </style>';
 
-                        throw new \Exception("{$splash}<div id='content'></div>
-                    <h1>Fatal Error during installation</h1>
-                    <p>This Wordpress is now likely to be corrupted, a new Installation is necessary.</p><br />".$e->getMessage().'</div>' );
+                        throw new \Exception("{$splash}<div id='content'>
+                    <h1>Unrecoverable error during installation</h1>
+                    <p>This Wordpress is now likely to be corrupted, a new Installation is necessary.</p>".$e->getMessage().'</div>' );
                     }
                 }
             }
