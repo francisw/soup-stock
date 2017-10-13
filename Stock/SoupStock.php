@@ -291,9 +291,8 @@ class SoupStock extends Singleton
 	    <body class="bg">
 	    <div id="content">
 		    <h1>Installing Vacation Soup Stock</h1>
-		    <img src="../../wp-content/plugins/soup-stock/img/loading.svg" />
+		    <img src="../wp-content/plugins/soup-stock-master/img/loading.svg" />
 		    <h3>You will be redirected to your login screen when this is complete. Do not refresh your screen, it should take less than a minute.</h3>
-	    <p><?= $_SERVER['REQUEST_URI'] ?>'/?_holding'</p>
         </div>
 	    </body>
         <script>
