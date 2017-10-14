@@ -25,15 +25,15 @@ This is a standard Wordpress plugin, and is installed using the wp-admin plugin 
 
 ## Usage
 
-This is an unattended plugin. Just activate it and it will run, silently. 
+This is an unattended plugin. Just activate it and it will install the Vacation Soup Stock. 
 
-When it is complete, you will have the login screen to your new installation. 
-Log in with tye credentials you used to create the Wordpress website, and start building your site.
+When it is complete, your page will automatically refresh with your new site. 
+Log in (add /wp-admin to the url) with the credentials you used to create the Wordpress website, and start building your site.
 
 
 ## Common problems
 
-This only works on a clean, brand new installation of Wordpress. If you have donbe anything in Wordpress other than install this plugin, it will not run, to protect what you have done. To correct this, delete your Wordpress installation and start again.
+This only works on a clean, brand new installation of Wordpress. If you have done anything in Wordpress other than install this plugin, it will not run in order to protect what you have done. To correct this, delete your Wordpress installation and start again.
 
 ## Feedback
 
