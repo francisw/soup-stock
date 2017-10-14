@@ -42,15 +42,12 @@ class SoupStock extends Singleton
 		        return;
 	        }
 
-	        // to work
-            // add -master to loadingsvg
-            // add back js redirect
-//	        $this->checkForNewInstallation();
 	        // Set a splash screen
 	        if (!isset($_REQUEST['_holding'])){
 		        $this->showHoldingPage(); // Holding page creates request again
 		        die();
 	        }
+	        $this->checkForNewInstallation();
 
 	        // Firstly prevent multiple calls. Have observed WP calling activation 3 times
 	        if (true===get_option('vs-stock-installing')){
@@ -97,7 +94,7 @@ class SoupStock extends Singleton
                     } catch (\Exception $e){
                         $splash = '<style> body, html { height: 100%; }
     body { 
-       background-image: url("https://launch.vacationsoup.com/wp-content/uploads/2017/07/bigstock-177198292.jpg" );
+	   background-image: url("../wp-content/plugins/soup-stock-release/img/vacationsoup-map-bg.jpg");
        background-position: center;
        background-repeat: no-repeat;
        background-size: cover;
@@ -197,29 +194,10 @@ class SoupStock extends Singleton
 
     private function mySQL($filename){
         GLOBAL $wpdb;
-        // $maxRuntime = 25; // less then your max script execution limit, as we use set_time_limit may not be needed
-
-
-        // $deadline = time()+$maxRuntime;
         $progressFilename = $filename.'_filepointer'; // tmp file for progress
         $errorFilename = $filename.'_error'; // tmp file for erro
 
         ($fp = fopen($filename, 'r')) OR die('failed to open file:'.$filename);
-
-        // check for previous error
-        //if( file_exists($errorFilename) ){
-        //    wp_die('<pre> previous error: '.file_get_contents($errorFilename));
-        //}
-
-        // activate automatic reload in browser
-        // echo '<html><head> <meta http-equiv="refresh" content="'.($maxRuntime+2).'"><pre>';
-
-        // go to previous file position
-        $filePosition = 0;
-        //if( file_exists($progressFilename) ){
-        //    $filePosition = file_get_contents($progressFilename);
-        //    fseek($fp, $filePosition);
-        //}
 
         $queryCount = 0;
         $query = '';
@@ -267,14 +245,8 @@ class SoupStock extends Singleton
 			    }
 
 			    .bg {
-				    /* The image used
-                    background-image: url("https://launch.vacationsoup.com/wp-content/uploads/2017/07/bigstock-177198292.jpg");
-                    */background-image: url("../wp-content/plugins/soup-stock-release/img/vacationsoup-map-bg.jpg");
-
-				    /* Full height */
+				    background-image: url("../wp-content/plugins/soup-stock-release/img/vacationsoup-map-bg.jpg");
 				    height: 100%;
-
-				    /* Center and scale the image nicely */
 				    background-position: center;
 				    background-repeat: no-repeat;
 				    background-size: cover;
