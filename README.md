@@ -4,7 +4,7 @@
 
 - **Lead Developer:**
 [Francis Wallinger](https://github.com/francisw)
-- **Version:** [0.0.1](https://github.com/francisw/soup-stock/releases)
+- **Version:** [0.1.0](https://github.com/francisw/soup-stock)
 - **Requires at least:** 4.7.1 
 - **Tested up to:** 4.8.2
 

@@ -18,7 +18,7 @@ namespace Stock;
 
 class SoupStock extends Singleton
 {
-    const RELEASE_DOMAIN = "freevacationrentalwebsite.com";
+    const RELEASE_DOMAIN = "stock.vacationsoup.com";
     const RELEASE_RRL = "wp-content/plugins/soup-release-master/current";
     const RELEASE_PFX = "vsoup_";
 
@@ -36,23 +36,27 @@ class SoupStock extends Singleton
         // We can't have to follow normal Wordpress conventions here because we are
         // replacing the Wordpress installation with the Soup, so we run it all from within init
 
-        // Firstly prevent multiple calls. Have observed WP calling activation 3 times
-        if (true===get_option('vs-stock-installing')){
-            throw new \Exception("Already installing Vacation Soup stock");
-        }
-        update_option('vs-stock-installing',true);
 
         try {
 	        if (isset($_REQUEST['nosoup'])){
 		        return;
 	        }
 
-	        $this->checkForNewInstallation();
+	        // to work
+            // add -master to loadingsvg
+            // add back js redirect
+//	        $this->checkForNewInstallation();
 	        // Set a splash screen
 	        if (!isset($_REQUEST['_holding'])){
 		        $this->showHoldingPage(); // Holding page creates request again
 		        die();
 	        }
+
+	        // Firstly prevent multiple calls. Have observed WP calling activation 3 times
+	        if (true===get_option('vs-stock-installing')){
+		        throw new \Exception("Already installing Vacation Soup stock");
+	        }
+	        update_option('vs-stock-installing',true);
 
 	        $stock='stock.tar';
             $file_url="https://".self::RELEASE_DOMAIN."/".self::RELEASE_RRL."/{$stock}.gz";
@@ -68,7 +72,7 @@ class SoupStock extends Singleton
                     // Save the logged in User record, incl Password etc
                     // Save site urls (possibly, depending if dom
 
-                    // OK, we're up - NO MORE wp commands from here, only raw php / unix
+                    // OK, we're up - NO MORE wp commands from here, only raw php / unix, as we are replacing WP
                     try {
                     	$this->exec_array([
 	                        //  move our website to a safe folder
@@ -263,8 +267,9 @@ class SoupStock extends Singleton
 			    }
 
 			    .bg {
-				    /* The image used */
-				    background-image: url("https://launch.vacationsoup.com/wp-content/uploads/2017/07/bigstock-177198292.jpg");
+				    /* The image used
+                    background-image: url("https://launch.vacationsoup.com/wp-content/uploads/2017/07/bigstock-177198292.jpg");
+                    */background-image: url("../wp-content/plugins/soup-stock-release/img/vacationsoup-map-bg.jpg");
 
 				    /* Full height */
 				    height: 100%;
@@ -278,20 +283,22 @@ class SoupStock extends Singleton
 			    }
 			    #content {
 				    width: 60%;
-				    margin: 20% 0 0 20%;
+				    margin: 15% 0 0 20%;
 				    text-align: center;
 			    }
 			    #content IMG {
 				    display: block;
 				    min-width: 10%;
+                    max-width: 100%;
 				    margin: auto;
 			    }
 		    </style>
 	    </head>
 	    <body class="bg">
 	    <div id="content">
+            <img src="../wp-content/plugins/soup-stock-release/img/vacation-soup-logo.png" />
 		    <h1>Installing Vacation Soup Stock</h1>
-		    <img src="../wp-content/plugins/soup-stock-master/img/loading.svg" />
+		    <img src="../wp-content/plugins/soup-stock-release/img/loading.svg" />
 		    <h3>You will be redirected to your login screen when this is complete. Do not refresh your screen, it should take less than a minute.</h3>
         </div>
 	    </body>

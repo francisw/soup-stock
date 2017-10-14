@@ -17,7 +17,7 @@ namespace Stock;
  * Plugin Name:       Vacation Soup Stock Installer
  * Plugin URI:        https://github.com/francisw/soup-release/release
  * Description:       Backup Stock for Distribution
- * Version:           0.0.1
+ * Version:           0.1.0
  * Author:            Francis Wallinger
  * Author URI:        http://github.com/francisw
  * License:           GPL-3.0+
