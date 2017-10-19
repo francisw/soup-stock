@@ -56,7 +56,8 @@ class SoupStock extends Singleton
 	        update_option('vs-stock-installing',true);
 
 	        $stock='stock.tar';
-            $file_url="https://".self::RELEASE_DOMAIN."/".self::RELEASE_RRL."/{$stock}.gz";
+	        //$file_url="https://".self::RELEASE_DOMAIN."/".self::RELEASE_RRL."/{$stock}.gz";
+	        $file_url="https://github.com/francisw/stock/blob/master/stock.tar.gz?raw=true";
             $old_table_prefix = $table_prefix;
             $new_table_prefix = 'vsoup_';
             $sql_foreign = ABSPATH.self::RELEASE_RRL.'/'.'stock.sql';
