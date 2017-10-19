@@ -77,7 +77,7 @@ class SoupStock extends Singleton
                             "mkdir pre-vs",
                             "mv *  pre-vs || true", // To allow the error on moving pre-vs to itself
 		                    // Get the stock
-		                    "curl -O {$file_url}",
+		                    "curl -Lo stock.tar.gz {$file_url}",
                             // Unpack the stock into this location
 		                    "/bin/gzip -d {$stock}",
 		                    "tar -xf {$stock}",
