@@ -27,7 +27,7 @@ namespace Stock;
 if ( ! defined( 'WPINC' ) ) {
 	throw new \Exception("Cannot be accessed directly");
 }
-if ( ! function_exists( 'version_compare' ) || version_compare( PHP_VERSION, '5.3.0', '<' ) ) {
+if ( ! function_exists( 'version_compare' ) || version_compare( PHP_VERSION, '5.4.45', '<' ) ) {
 	throw new \Exception("PHP Version not supported");
 }
 
